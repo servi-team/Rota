@@ -1,4 +1,4 @@
-/* Koçluk paneli — bağımlılıksız istemci */
+/* Rota paneli — bağımlılıksız istemci */
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -142,7 +142,7 @@ async function init() {
 
     $('#dbPath').textContent = boot.dbPath;
     $('#studentName').textContent = `${boot.settings.student_name} · YKS 2027`;
-    document.title = `${boot.settings.student_name} · Koçluk`;
+    document.title = `${boot.settings.student_name} · Rota`;
 
     $('#dateInput').max = boot.today;
     $('#examDate').value = boot.today;
@@ -339,12 +339,18 @@ function renderDayForm() {
   syncForm();
 }
 
+function trackTagHTML(subject) {
+  const name = subject.name.toLowerCase();
+  const track = subject.track.toLowerCase();
+  return name.startsWith(`${track} `) ? '' : `<span class="track-tag">${esc(subject.track)}</span>`;
+}
+
 function subjectRowHTML(subject, row) {
   return `
     <div class="subject-row" data-id="${subject.id}">
       <div class="subject-name">
         <span title="${esc(subject.name)}">${esc(subject.name)}</span>
-        <span class="track-tag">${esc(subject.track)}</span>
+        ${trackTagHTML(subject)}
       </div>
       <div class="stepper">
         <button type="button" data-step="-5" aria-label="azalt" title="Shift ile 1 azalt">−</button>
@@ -1104,7 +1110,7 @@ async function saveSettings(event) {
     });
     state.settings = settings;
     $('#studentName').textContent = `${settings.student_name} · YKS 2027`;
-    document.title = `${settings.student_name} · Koçluk`;
+    document.title = `${settings.student_name} · Rota`;
     renderSettingsForm();
     renderDayStats();
     if (state.historyLoaded) renderRange();
@@ -1119,7 +1125,7 @@ async function saveSettings(event) {
 function renderSubjectManager() {
   $('#subjectManager').innerHTML = state.subjects.map((s) => `
     <div class="subject-manager-row">
-      <span class="track-tag">${esc(s.track)}</span>
+      ${trackTagHTML(s)}
       <span class="grow" title="${esc(s.name)}">${esc(s.name)}</span>
       <button type="button" data-del-subject="${s.id}" title="Dersi sil" aria-label="${esc(s.name)} dersini sil">×</button>
     </div>

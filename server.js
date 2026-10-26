@@ -167,7 +167,7 @@ async function handleApi(req, res, url) {
     const csv = exportCsv();
     res.writeHead(200, {
       'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Disposition': `attachment; filename="kocluk-${todayISO()}.csv"`,
+      'Content-Disposition': `attachment; filename="rota-${todayISO()}.csv"`,
       'Content-Length': Buffer.byteLength(csv),
       'Cache-Control': 'no-store',
     });
@@ -212,7 +212,7 @@ server.on('error', (err) => {
 
 server.listen(PORT, HOST, () => {
   console.log('');
-  console.log('  Koçluk paneli çalışıyor');
+  console.log('  Rota paneli çalışıyor');
   console.log(`  → http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
   console.log(`  Veritabanı: ${DB_PATH}`);
   console.log('');

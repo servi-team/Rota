@@ -1,6 +1,6 @@
-# Koçluk — YKS 2027 takip paneli
+# Rota — YKS 2027 takip paneli
 
-YKS 2027'ye hazırlanan bir öğrencinin **günlük soru sayısını, çalışma süresini, ders dağılımını ve deneme netlerini** takip etmek için lokal çalışan, tek dosyalık veritabanı kullanan bir panel.
+Rota, YKS 2027'ye hazırlanan bir öğrencinin **günlük soru sayısını, çalışma süresini, ders dağılımını ve deneme netlerini** takip etmek için lokal çalışan, tek dosyalık veritabanı kullanan bir panel.
 
 - Bağımlılık yok, `npm install` gerekmez (Node.js'in yerleşik `node:sqlite` modülünü kullanır).
 - Tüm veriler bilgisayarda: `data/kocluk.db`
