@@ -18,7 +18,7 @@ npm start
 
 Ardından tarayıcıda **http://localhost:5173** adresini aç.
 
-Durdurmak için terminalde `Ctrl + C`. İlk çalıştırmada `data/kocluk.db` otomatik oluşturulur ve TYT/AYT dersleri hazır gelir.
+Durdurmak için terminalde `Ctrl + C`. İlk çalıştırmada `data/kocluk.db` otomatik oluşturulur ve TYT/AYT dersleri hazır gelir. TYT fen bilimleri **fizik, kimya ve biyoloji** olarak ayrı takip edilir.
 
 ### Telefondan aynı Wi-Fi'da açmak
 

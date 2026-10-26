@@ -74,23 +74,56 @@ db.exec(`
 
 /* ---------------------------------------------------------------- seed */
 
+const SCHEMA_VERSION = 2;
+
 const SEED_SUBJECTS = [
   ['Türkçe', 'TYT', 10],
   ['Sosyal Bilimler', 'TYT', 20],
   ['Temel Matematik', 'TYT', 30],
-  ['Fen Bilimleri', 'TYT', 40],
-  ['Matematik', 'AYT', 50],
-  ['Fizik', 'AYT', 60],
-  ['Kimya', 'AYT', 70],
-  ['Biyoloji', 'AYT', 80],
-  ['Edebiyat', 'AYT', 90],
-  ['Tarih', 'AYT', 100],
-  ['Coğrafya', 'AYT', 110],
+  ['TYT Fizik', 'TYT', 40],
+  ['TYT Kimya', 'TYT', 50],
+  ['TYT Biyoloji', 'TYT', 60],
+  ['Matematik', 'AYT', 70],
+  ['Fizik', 'AYT', 80],
+  ['Kimya', 'AYT', 90],
+  ['Biyoloji', 'AYT', 100],
+  ['Edebiyat', 'AYT', 110],
+  ['Tarih', 'AYT', 120],
+  ['Coğrafya', 'AYT', 130],
 ];
 
-if (db.prepare('SELECT COUNT(*) AS n FROM subjects').get().n === 0) {
-  const insert = db.prepare('INSERT INTO subjects (name, track, sort_order) VALUES (?, ?, ?)');
-  for (const row of SEED_SUBJECTS) insert.run(...row);
+const insertSubject = db.prepare('INSERT OR IGNORE INTO subjects (name, track, sort_order) VALUES (?, ?, ?)');
+
+// Version 1 shipped a single "Fen Bilimleri" row for TYT. Version 2 splits it
+// into physics, chemistry and biology so each can be tracked separately.
+// Historical rows cannot be split, so if the old subject already has data it
+// is kept as "TYT Fizik" (old aggregate) instead of being dropped.
+function migrateTytScience() {
+  const legacy = db.prepare("SELECT id FROM subjects WHERE name = 'Fen Bilimleri' AND track = 'TYT'").get();
+  if (legacy) {
+    const usedDaily = db.prepare('SELECT COUNT(*) AS n FROM day_subjects WHERE subject_id = ?').get(legacy.id).n;
+    const usedExam = db.prepare('SELECT COUNT(*) AS n FROM exam_results WHERE subject_id = ?').get(legacy.id).n;
+    const target = db.prepare("SELECT id FROM subjects WHERE name = 'TYT Fizik'").get();
+    if (usedDaily + usedExam === 0) {
+      db.prepare('DELETE FROM subjects WHERE id = ?').run(legacy.id);
+    } else if (!target) {
+      db.prepare("UPDATE subjects SET name = 'TYT Fizik', sort_order = 40 WHERE id = ?").run(legacy.id);
+    }
+  }
+  insertSubject.run('TYT Fizik', 'TYT', 40);
+  insertSubject.run('TYT Kimya', 'TYT', 50);
+  insertSubject.run('TYT Biyoloji', 'TYT', 60);
+}
+
+const schemaVersion = db.prepare('PRAGMA user_version').get().user_version;
+if (schemaVersion < SCHEMA_VERSION) {
+  transaction(() => {
+    if (db.prepare('SELECT COUNT(*) AS n FROM subjects').get().n === 0) {
+      for (const row of SEED_SUBJECTS) insertSubject.run(...row);
+    }
+    if (schemaVersion < 2) migrateTytScience();
+  });
+  db.exec(`PRAGMA user_version = ${SCHEMA_VERSION}`);
 }
 db.prepare('INSERT OR IGNORE INTO settings (id) VALUES (1)').run();
 
