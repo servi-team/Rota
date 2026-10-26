@@ -663,7 +663,7 @@ function renderRange() {
     series: stats.series,
     valueFn: (d) => d.questions,
     goal: goals.daily_questions,
-    color: '#8b95ff',
+    color: '#8dc63f',
     tooltip: (d, v) => `${fmtDate(d.date)} · ${fmtNum(v)} soru`,
     goalLabel: (g) => `${fmtNum(g)} soru`,
     yLabel: 'soru',
@@ -675,7 +675,7 @@ function renderRange() {
     series: stats.series,
     valueFn: (d) => d.minutes / 60,
     goal: goals.daily_minutes / 60,
-    color: '#34d399',
+    color: '#139bb2',
     tooltip: (d) => `${fmtDate(d.date)} · ${fmtMinutes(d.minutes)}`,
     goalLabel: (g) => `${fmtNet(g)} saat`,
     yLabel: 'saat',
@@ -709,12 +709,12 @@ function renderBarChart(container, options) {
   const yFor = (value) => pad.top + plotH - (value / max) * plotH;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(options.yLabel || 'grafik')}">
-    <line x1="${pad.left}" y1="${pad.top + plotH}" x2="${W - pad.right}" y2="${pad.top + plotH}" stroke="#1f2a3a" stroke-width="1" />`;
+    <line x1="${pad.left}" y1="${pad.top + plotH}" x2="${W - pad.right}" y2="${pad.top + plotH}" stroke="#26312e" stroke-width="1" />`;
 
   if (goal > 0) {
     const gy = yFor(goal);
-    svg += `<line x1="${pad.left}" y1="${gy}" x2="${W - pad.right}" y2="${gy}" stroke="#55657d" stroke-width="1" stroke-dasharray="4 5" />
-      <text x="${W - pad.right}" y="${gy - 6}" text-anchor="end" fill="#64748b" font-size="10">hedef ${goalLabel ? goalLabel(goal) : goal}</text>`;
+    svg += `<line x1="${pad.left}" y1="${gy}" x2="${W - pad.right}" y2="${gy}" stroke="#6f7b77" stroke-width="1" stroke-dasharray="4 5" />
+      <text x="${W - pad.right}" y="${gy - 6}" text-anchor="end" fill="#6f7b77" font-size="10">hedef ${goalLabel ? goalLabel(goal) : goal}</text>`;
   }
 
   series.forEach((d, i) => {
@@ -727,7 +727,7 @@ function renderBarChart(container, options) {
         <title>${esc(tooltip(d, value))}</title></rect>`;
     }
     if (i % labelEvery === 0 || i === series.length - 1) {
-      svg += `<text x="${(x + barW / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle" fill="#64748b" font-size="10">${esc(labelFn(d))}</text>`;
+      svg += `<text x="${(x + barW / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle" fill="#6f7b77" font-size="10">${esc(labelFn(d))}</text>`;
     }
   });
 
@@ -886,7 +886,7 @@ function examTotals() {
     const w = Number($('input.w', row).value) || 0;
     const net = c - w / 4;
     $('.net', row).textContent = fmtNet(net);
-    $('.net', row).style.color = net < 0 ? '#f87171' : net > 0 ? '#34d399' : '#91a1b8';
+    $('.net', row).style.color = net < 0 ? '#f87171' : net > 0 ? '#8dc63f' : '#9aa5a1';
     correct += c;
     wrong += w;
   });
@@ -973,30 +973,30 @@ function renderExamChart() {
   const labelEvery = Math.max(1, Math.ceil(exams.length / 6));
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Deneme net trendi">
-    <line x1="${pad.left}" y1="${pad.top + plotH}" x2="${W - pad.right}" y2="${pad.top + plotH}" stroke="#1f2a3a" />`;
+    <line x1="${pad.left}" y1="${pad.top + plotH}" x2="${W - pad.right}" y2="${pad.top + plotH}" stroke="#26312e" />`;
 
   for (let step = 0; step <= 2; step += 1) {
     const value = (max / 2) * step;
     const y = yFor(value);
-    svg += `<line x1="${pad.left}" y1="${y}" x2="${W - pad.right}" y2="${y}" stroke="#1b2534" stroke-dasharray="2 4" />
-      <text x="${pad.left - 7}" y="${y + 3}" text-anchor="end" fill="#64748b" font-size="9">${fmtNum(value)}</text>`;
+    svg += `<line x1="${pad.left}" y1="${y}" x2="${W - pad.right}" y2="${y}" stroke="#202a27" stroke-dasharray="2 4" />
+      <text x="${pad.left - 7}" y="${y + 3}" text-anchor="end" fill="#6f7b77" font-size="9">${fmtNum(value)}</text>`;
   }
 
-  svg += `<polyline points="${points}" fill="none" stroke="#8b95ff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />`;
+  svg += `<polyline points="${points}" fill="none" stroke="#8dc63f" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />`;
 
   exams.forEach((e, i) => {
     const x = xFor(i);
     const y = yFor(e.net);
-    svg += `<circle cx="${x}" cy="${y}" r="3.4" fill="#0e141d" stroke="#a78bfa" stroke-width="2">
+    svg += `<circle cx="${x}" cy="${y}" r="3.4" fill="#111715" stroke="#139bb2" stroke-width="2">
       <title>${esc(fmtDate(e.date))} · ${esc(e.type)}${e.name ? ` · ${esc(e.name)}` : ''} · ${fmtNet(e.net)} net</title>
     </circle>`;
     if (exams.length === 1 || i % labelEvery === 0 || i === exams.length - 1) {
-      svg += `<text x="${x}" y="${H - 8}" text-anchor="middle" fill="#64748b" font-size="9">${esc(fmtDate(e.date, 'short'))}</text>`;
+      svg += `<text x="${x}" y="${H - 8}" text-anchor="middle" fill="#6f7b77" font-size="9">${esc(fmtDate(e.date, 'short'))}</text>`;
     }
   });
 
   if (exams.length === 1) {
-    svg += `<text x="${xFor(0)}" y="${yFor(exams[0].net) - 10}" text-anchor="middle" fill="#e9eff8" font-size="12" font-weight="600">${fmtNet(exams[0].net)} net</text>`;
+    svg += `<text x="${xFor(0)}" y="${yFor(exams[0].net) - 10}" text-anchor="middle" fill="#e3e7e6" font-size="12" font-weight="600">${fmtNet(exams[0].net)} net</text>`;
   }
 
   $('#examChart').innerHTML = `${svg}</svg>`;
