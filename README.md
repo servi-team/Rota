@@ -1,6 +1,15 @@
-# Rota — YKS 2027 takip paneli
+<p align="center">
+  <img src="public/logo.png" alt="Rota logosu" width="140">
+</p>
 
-Rota, YKS 2027'ye hazırlanan bir öğrencinin **günlük soru sayısını, çalışma süresini, ders dağılımını ve deneme netlerini** takip etmek için lokal çalışan, tek dosyalık veritabanı kullanan bir panel.
+<h1 align="center">Rota</h1>
+
+<p align="center">
+  <strong>Lokalde çalışan Ders ve Deneme Takip Sistemi</strong><br>
+  <sub>Bir <a href="https://github.com/servi-team">Servi</a> projesi</sub>
+</p>
+
+Rota, YKS 2027'ye hazırlanan bir öğrencinin **günlük soru sayısını, çalışma süresini, ders dağılımını ve deneme netlerini** takip eden, tamamen lokalde çalışan bir Ders ve Deneme Takip Sistemi.
 
 - Bağımlılık yok, `npm install` gerekmez (Node.js'in yerleşik `node:sqlite` modülünü kullanır).
 - Tüm veriler bilgisayarda: `data/kocluk.db`
@@ -12,7 +21,8 @@ Rota, YKS 2027'ye hazırlanan bir öğrencinin **günlük soru sayısını, çal
 Gereken: **Node.js 24 veya üzeri** (`node -v` ile kontrol et).
 
 ```bash
-cd kocluk
+git clone https://github.com/servi-team/Rota.git
+cd Rota
 npm start
 ```
 
