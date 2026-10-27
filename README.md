@@ -9,6 +9,11 @@
   <sub>Bir <a href="https://github.com/servi-team">Servi</a> projesi</sub>
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/gecmis.png" alt="Rota Geçmiş ekranı" width="49%">
+  <img src="docs/screenshots/denemeler.png" alt="Rota Denemeler ekranı" width="49%">
+</p>
+
 Rota, YKS 2027'ye hazırlanan bir öğrencinin **günlük soru sayısını, çalışma süresini, ders dağılımını ve deneme netlerini** takip eden, tamamen lokalde çalışan bir Ders ve Deneme Takip Sistemi.
 
 - Bağımlılık yok, `npm install` gerekmez (Node.js'in yerleşik `node:sqlite` modülünü kullanır).
@@ -188,11 +193,3 @@ GET    /api/export.csv         CSV yedeği
 ```
 
 Port değiştirmek için: `PORT=5174 npm start`
-
-## Sonraki adımlar (isteğe bağlı)
-
-- Konu/tekrar tamamlama takibi (ders → konu → bitiş tarihi)
-- Haftalık plan tablosu ve hatırlatmalar
-- Çoklu öğrenci + basit giriş
-- PDF haftalık rapor
-- Grafikleri görsel olarak dışa aktarma
